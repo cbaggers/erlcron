@@ -61,7 +61,7 @@
 
 %% @doc
 %%  Check that the spec specified is valid or invalid
--spec validate(run_when()) -> valid | invalid.
+-spec validate(Spec::run_when()) -> valid | invalid.
 validate(Spec) ->
     ecrn_agent:validate(Spec).
 
@@ -70,7 +70,7 @@ validate(Spec) ->
 %%  spec. It returns the JobRef that can be used to manipulate the job
 %%  after it is created.
 
--spec cron(job()) -> job_ref().
+-spec cron(Job::job()) -> job_ref().
 cron(Job) ->
     JobRef = make_ref(),
     ecrn_cron_sup:add_job(JobRef, Job).
@@ -91,7 +91,7 @@ once(When, Fun) ->
 
 %% @doc
 %% Cancel the job specified by the jobref.
--spec cancel(job_ref()) -> ok | undefined.
+-spec cancel(JobRef::job_ref()) -> ok | undefined.
 cancel(JobRef) ->
     ecrn_control:cancel(JobRef).
 
@@ -103,19 +103,19 @@ datetime() ->
 
 %% @doc
 %%  Set the current date time of the running erlcron system.
--spec set_datetime(calendar:datetime()) -> ok.
+-spec set_datetime(DateTime::calendar:datetime()) -> ok.
 set_datetime(DateTime) ->
     ecrn_control:set_datetime(DateTime).
 
 %% @doc
 %%  Set the current date time of the erlcron system running on different nodes.
--spec multi_set_datetime(calendar:datetime()) -> ok.
+-spec multi_set_datetime(DateTime::calendar:datetime()) -> ok.
 multi_set_datetime(DateTime) ->
     ecrn_control:multi_set_datetime([node()|nodes()], DateTime).
 
 %% @doc
 %%  Set the current date time of the erlcron system running on the
 %%  specified nodes
--spec multi_set_datetime([node()], calendar:datetime()) -> ok.
+-spec multi_set_datetime(Nodes::[node()], DateTime::calendar:datetime()) -> ok.
 multi_set_datetime(Nodes, DateTime) when is_list(Nodes) ->
     ecrn_control:multi_set_datetime(Nodes, DateTime).
